@@ -1,0 +1,50 @@
+#WRONG!!!!!!!!!!!!!
+
+def regex(pattern, s):
+    pat_list = []
+    for c in pattern:
+        if c == '*':
+            pat_list[-1] = pat_list[-1]+'*'
+        else:
+            pat_list.append(c)
+    
+    valid_string = False
+
+    def compare(pat, s, i, j):
+        nonlocal valid_string
+        if  i == len(pat) and j == len(s):
+            valid_string = True
+        elif i >= len(pat) or j >= len(s):
+            return
+        else:
+            if pat[i] == s[j] or pat[i] == '.':
+                compare(pat, s, i+1, j+1)
+            else:
+                if '*' in pat[i]:
+                    compare(pat, s, i, j+1)
+                    compare(pat, s, i+1, j)
+                    compare(pat, s, i+1, j+1)
+    
+    compare(pat_list, s, 0, 0)
+    return valid_string
+
+test = [
+    [
+        '.*act', 'fact'
+    ],
+    [
+        '.act', 'fact'
+    ],
+    [
+        '.act', 'act'
+    ],
+    [
+        '.*act.*', 'interactive'
+    ],
+    [
+        'a*cb', 'cb'
+    ]
+]
+
+for t in test:
+    print(t, regex(*t))
